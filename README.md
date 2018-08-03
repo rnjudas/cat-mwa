@@ -82,7 +82,7 @@ iptables -vnL
 ## Built With
 
 * [Ansible](https://www.ansible.com/) - The automation tool used
-* [Vagrant](https://www.ansible.com/) - Portable virtual software maintainer
+* [Vagrant](https://www.vagrantup.com/) - Portable virtual software maintainer
 * [Virtualbox](https://www.virtualbox.org/wiki/VirtualBox) -  General-purpose full virtualizer for x86 hardware
 
 ## Contributing
