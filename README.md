@@ -57,6 +57,28 @@ Finally navigate to http://IP/mediawiki/index.php/Main_Page which would default 
 http://192.168.34.8/mediawiki/index.php/Main_Page
 ```
 
+## Security
+
+To secure the server simply modify the firewall rules and add your source address to the ports you wish to have open only to your subnets. Below is an exmaple for SSH.
+
+```
+vi /etc/iptables-rules
+[...]
+# Allow incoming SSH requests.
+  $IP4TABLES -A INPUT -s $YOURSOURCEADDR -m state --state NEW -p tcp --dport 22 -j ACCEPT
+[...]
+```
+Once you have made this addition simple rerun the filter ruleset:
+
+```
+/etc/iptables-rules
+```
+
+The rules can be viewed with:
+
+```
+iptables -vnL
+```
 ## Built With
 
 * [Ansible](https://www.ansible.com/) - The automation tool used
