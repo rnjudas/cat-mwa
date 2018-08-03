@@ -97,7 +97,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 * **Renaldo Maclons** - *Initial work* - [RNJudas](https://github.com/rnjudas)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/rnjudas) who participated in this project.
 
 ## License
 
