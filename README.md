@@ -1,4 +1,4 @@
-# Project Title
+# CAT-MWA
 
 A simple Mediawiki Assessment.
 
