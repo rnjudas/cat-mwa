@@ -1,0 +1,4 @@
+# Lets set some default values for runtime.
+
+MYSQL_ROOT_CREDS: "lrYnRnvgNexZxYKVtpUM"
+MEDIAWIKI_MYSQL_CREDS: "uVzHEbumapAfFdjEOiwD"

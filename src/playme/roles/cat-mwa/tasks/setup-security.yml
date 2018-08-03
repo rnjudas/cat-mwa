@@ -1,0 +1,27 @@
+---
+# Lets get things secure.
+- name: Install fail2ban & IPTables
+  apt:
+   name: "{{ item }}"
+   state: present
+   install_recommends: yes
+  become: yes
+  with_items:
+   - fail2ban
+   - iptables
+   - libnfnetlink0
+   - libxtables11
+
+- name: Create IPTables ruleset.
+  template:
+    src: templates/etc/default/iptables-rules.j2
+    dest: /etc/iptables-rules
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+
+- name: Load firewall
+  command: /etc/iptables-rules
+  register: firewall_result
+  failed_when: "'FAILED' in firewall_result.stderr"

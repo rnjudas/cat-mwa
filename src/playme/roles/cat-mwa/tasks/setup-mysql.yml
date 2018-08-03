@@ -1,0 +1,97 @@
+---
+#Here we install mysql-server and the client, drop the anon and test db just for good measure :)
+- name: Install MySQL
+  apt:
+   name: "{{ item }}"
+   state: present
+   install_recommends: yes
+  become: yes
+  with_items:
+    - mysql-client
+    - mysql-server
+    - python-mysqldb
+
+- name: Start the MySQL service
+  service:
+    name: mysql
+    state: started
+  become: yes
+
+# 'localhost' needs to be the last item for idempotency, see
+# http://ansible.cc/docs/modules.html#mysql-user
+- name: update mysql root password for all root accounts
+  mysql_user:
+    login_host: localhost
+    login_user: root
+    login_password: "{{ MYSQL_ROOT_CREDS }}"
+    name: root
+    host: "{{ item }}"
+    password: "{{ MYSQL_ROOT_CREDS }}"
+  become: yes
+  with_items:
+    - "{{HOSTNAME}}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: delete anonymous MySQL server user for $server.hostname
+  mysql_user:
+    login_host: localhost
+    login_user: root
+    login_password: "{{ MYSQL_ROOT_CREDS }}"
+    user: ""
+    host: localhost
+    state: absent
+  become: yes
+
+- name: delete anonymous MySQL server user for localhost
+  mysql_user:
+    login_host: localhost
+    login_user: root
+    login_password: "{{ MYSQL_ROOT_CREDS }}"
+    user: ""
+    state: absent
+  become: yes
+
+- name: remove the MySQL test database
+  mysql_db:
+    login_host: localhost
+    login_user: root
+    login_password: "{{ MYSQL_ROOT_CREDS }}"
+    db: test
+    state: absent
+  become: yes
+
+- name: Copy database dump file
+  copy:
+    src: files/var/lib/mysql/cwmdb.sql
+    dest: /tmp
+  become: yes
+
+- name: Setup our mediawikiDB
+  mysql_db:
+    name: cwmdb
+    state: import
+    target: /tmp/cwmdb.sql
+    login_host: localhost
+    login_user: root
+    login_password: "{{MYSQL_ROOT_CREDS}}"
+  become: yes
+
+- name: Create the mediawiki user and grant all privileges on the project DB.
+  mysql_user:
+    name: cwmdbuser
+    password: "{{MEDIAWIKI_MYSQL_CREDS}}"
+    host: localhost
+    priv: 'cwmdb.*:ALL'
+    state: present
+    login_host: localhost
+    login_user: root
+    login_password: "{{MYSQL_ROOT_CREDS}}"
+  become: yes
+
+- name: Cleanup the temporary dump file.
+  file:
+    path: /tmp/cwmdb.sql
+    state: absent
+  become: yes

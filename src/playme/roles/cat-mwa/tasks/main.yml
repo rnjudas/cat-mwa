@@ -1,0 +1,7 @@
+---
+# tasks file for cat-mwa
+- import_tasks: setup-base.yml
+- import_tasks: setup-mysql.yml
+- import_tasks: setup-apache2.yml
+- import_tasks: setup-security.yml
+- import_tasks: setup-mediawiki.yml

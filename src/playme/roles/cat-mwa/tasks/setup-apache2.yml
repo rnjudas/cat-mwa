@@ -1,0 +1,39 @@
+---
+#Here we install Apache2 and PHP
+
+- name: Install Apache2, PHP
+  apt:
+   name: "{{ item }}"
+   state: present
+   install_recommends: yes
+  become: yes
+  with_items:
+   - apache2
+   - apache2-data
+   - apache2-doc
+   - php
+   - php-mysql
+   - libapache2-mod-php
+   - php-xml
+   - php-mbstring
+
+- name: Set the limits for PHP
+  template:
+    src: templates/etc/php/7.0/apache2/php.ini.j2
+    dest: /etc/php/7.0/apache2/php.ini
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+
+- name: Enable php module mbstring
+  command: phpenmod mbstring
+  become: yes
+  notify:
+    - restart apache2
+
+- name: Enable php module xml
+  command: phpenmod xml
+  become: yes
+  notify:
+    - restart apache2

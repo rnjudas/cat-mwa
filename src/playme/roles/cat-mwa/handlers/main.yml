@@ -1,0 +1,12 @@
+---
+# handlers file for cat-mwa
+
+- name: restart apache2
+  service: name=apache2 state=restarted
+  become: yes
+
+- name: restart fail2ban
+  service: name=fail2ban state=restarted
+
+- name: restart mysql
+  service: name=mysql state=restarted

@@ -1,0 +1,11 @@
+---
+# Play:   playbook.yml
+# I am sure its simple enough to read.
+
+-   hosts:  '{{HOSTNAME}}'
+    user:    '{{USER}}'
+    gather_facts: False
+
+
+    roles:
+    - { role: '{{ROLE}}' }

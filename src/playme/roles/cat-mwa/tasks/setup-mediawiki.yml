@@ -1,0 +1,46 @@
+---
+# Lets setup our wiki
+
+- name: Download the MediaWiki source files to our server.
+  get_url:
+    url: https://releases.wikimedia.org/mediawiki/1.31/mediawiki-1.31.0.tar.gz
+    dest: /tmp/mediawiki.tar.gz
+  become: yes
+
+- name: Setup the web application folder
+  file:
+    path: /var/lib/mediawiki
+    state: directory
+    owner: www-data
+    group: www-data
+  become: yes
+
+- name: Extract the MediaWiki src to the designated folder.
+  unarchive:
+    src: /tmp/mediawiki.tar.gz
+    dest: /var/lib/mediawiki
+    extra_opts: [--strip-components=1]
+  become: yes
+
+- name: Setup the application LocalSettings.php
+  template:
+    src: templates/var/lib/mediawiki/LocalSettings.php.j2
+    dest: /var/lib/mediawiki/LocalSettings.php
+    owner: www-data
+    group: www-data
+  become: yes
+
+- name: Setup the webroot for our web application
+  file:
+    src: /var/lib/mediawiki
+    dest: /var/www/html/mediawiki
+    state: link
+  become: yes
+
+- name: Ensure file permissions are set to the correct owner.
+  file:
+    path: /var/lib/mediawiki
+    owner: www-data
+    group: www-data
+    recurse: yes
+  become: yes

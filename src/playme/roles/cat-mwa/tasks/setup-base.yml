@@ -1,0 +1,15 @@
+---
+# Here we setup the base system, the packages below should indicate that we are ensuring stability and security is the primary goal.
+- name: Install NTP, rkhunter, and Binutils.
+  apt:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items:
+    - ntp
+    - ntpdate
+    - rkhunter
+    - binutils
+    - python-pexpect
+    - debconf-utils
+    - rsync
