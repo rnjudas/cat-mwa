@@ -22,6 +22,6 @@
   become: yes
 
 - name: Load firewall
-  command: bash /etc/iptables-rules
+  command: /etc/iptables-rules
   register: firewall_result
   failed_when: "'FAILED' in firewall_result.stderr"
